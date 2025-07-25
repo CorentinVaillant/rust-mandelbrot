@@ -30,6 +30,7 @@ macro_rules! info_display{
 current set : {}      to change the drawed set press J => Julia, M => Mandelbrot
 current start value : {} +i{} use the arrows to move it
 current palette offset :{}    use + and - to change it
+press 0 to reset to default
 press h to see infos 
         "#
     };

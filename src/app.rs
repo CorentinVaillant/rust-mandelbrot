@@ -64,6 +64,8 @@ impl ApplicationHandler for App<'_> {
                 (KeyCode::KeyM,_) => if !self.draw_mandel {self.draw_mandel = true;  self.window.request_redraw();}
 
 
+                (KeyCode::Numpad0,ElementState::Released) => {self.reset_params(); self.window.request_redraw();},
+
                 (KeyCode::KeyH,ElementState::Released) => self.display_infos(),
 
                 _=>()
@@ -139,5 +141,10 @@ impl App<'_> {
             self.start[0],self.start[1],
             self.palette_offset
         );
+    }
+
+    fn reset_params(&mut self){
+        self.start = [0.;2];            
+        self.palette_offset = 0.;            
     }
 }
