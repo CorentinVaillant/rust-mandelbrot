@@ -75,7 +75,7 @@ vec4 mandelbrot(vec2 c){
 void main()
 {    
     vec2 uv = (gl_FragCoord.xy - resolution / 2.0) * zoom / resolution.y;
-    vec2 c = center + uv;
+    vec2 c =  uv - center;
 
     fragColor = mandelbrot(c);
    

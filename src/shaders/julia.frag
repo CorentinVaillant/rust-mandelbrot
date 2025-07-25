@@ -66,7 +66,7 @@ vec4 julia(vec2 z,vec2 c){
 void main()
 {
     vec2 uv = (gl_FragCoord.xy - resolution / 2.0) * zoom / resolution.y;
-    vec2 z = center + uv;
+    vec2 z = uv - center;
 
     fragColor = julia(z,start);
 }
