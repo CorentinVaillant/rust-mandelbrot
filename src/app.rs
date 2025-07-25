@@ -18,6 +18,8 @@ pub struct App<'a>{
     display: Display<WindowSurface>,
     draw_params : DrawParameters<'a>,
 
+    zoom : f32,
+    center : [f32;2],
     start:[f32;2],
     palette_offset:f32,
     draw_mandel : bool, //if true draw Mandelbrot, else draw Julia
@@ -52,20 +54,34 @@ impl ApplicationHandler for App<'_> {
             },
             WindowEvent::RedrawRequested  =>self.draw().unwrap_or_else(|err|eprintln!("Draw err : {err}")),
             WindowEvent::KeyboardInput { device_id:_, event, is_synthetic:_ }=>if let PhysicalKey::Code(key_code) =  event.physical_key {match (key_code,event.state) {
+                // Moving the start point
                 (KeyCode::ArrowLeft,_) =>   {self.start[0] -= 0.01; self.window.request_redraw();},
                 (KeyCode::ArrowRight,_) =>  {self.start[0] += 0.01; self.window.request_redraw();},
                 (KeyCode::ArrowDown,_) =>   {self.start[1] -= 0.01; self.window.request_redraw();},
                 (KeyCode::ArrowUp,_) =>     {self.start[1] += 0.01; self.window.request_redraw();},
 
+                // Moving the center
+                (KeyCode::KeyA,_) =>  {self.center[0] += 0.1 * self.zoom; self.window.request_redraw();},
+                (KeyCode::KeyD,_) =>  {self.center[0] -= 0.1 * self.zoom; self.window.request_redraw();},
+                (KeyCode::KeyS,_) =>  {self.center[1] += 0.1 * self.zoom; self.window.request_redraw();},
+                (KeyCode::KeyW,_) =>  {self.center[1] -= 0.1 * self.zoom; self.window.request_redraw();},
+
+                // Changing the zoom
+                (KeyCode::ShiftLeft,_) | (KeyCode::ShiftRight,_) =>  {self.zoom /= 1.1; self.window.request_redraw();},
+                (KeyCode::ControlLeft,_) | (KeyCode::ControlRight,_) =>  {self.zoom *= 1.1; self.window.request_redraw();},
+
+                // Moving the palette offset
                 (KeyCode::NumpadSubtract,_) | (KeyCode::Minus,_) =>     {self.palette_offset -= 0.01; self.window.request_redraw();},
                 (KeyCode::NumpadAdd,_) =>     {self.palette_offset += 0.01; self.window.request_redraw();},
 
+                // Changing set to draw
                 (KeyCode::KeyJ,_) => if self.draw_mandel  {self.draw_mandel = false; self.window.request_redraw();}
                 (KeyCode::KeyM,_) => if !self.draw_mandel {self.draw_mandel = true;  self.window.request_redraw();}
 
-
+                // Reset
                 (KeyCode::Numpad0,ElementState::Released) => {self.reset_params(); self.window.request_redraw();},
 
+                // Help
                 (KeyCode::KeyH,ElementState::Released) => self.display_infos(),
 
                 _=>()
@@ -98,6 +114,8 @@ impl App<'_> {
             display,
             draw_params,
 
+            zoom : 3.,
+            center : [0.5,0.25],
             start : [0.;2],
             palette_offset: 0.5,
             draw_mandel: true,
@@ -121,7 +139,9 @@ impl App<'_> {
             resolution : resolution,
             transforms : MAT4_ID,
             start : self.start,
+            center : self.center,
             palette_offset : self.palette_offset,
+            zoom : self.zoom
         };
         if self.draw_mandel{
             frame.draw(&self.canvas_v_buff, &self.canvas_indices, &self.mand_prog, &uni, &self.draw_params)?;
@@ -138,12 +158,16 @@ impl App<'_> {
         let drawed = if self.draw_mandel{"Mandelbrot"} else {"Julia"};
         println!(info_display!(), 
             drawed,
+            self.center[0],self.center[1],
             self.start[0],self.start[1],
+            self.zoom,
             self.palette_offset
         );
     }
 
     fn reset_params(&mut self){
+        self.zoom = 3.;
+        self.center = [0.5,0.25];
         self.start = [0.;2];            
         self.palette_offset = 0.;            
     }

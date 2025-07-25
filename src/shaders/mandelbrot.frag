@@ -1,9 +1,13 @@
 #version 330
 
+precision highp float;
+
 out vec4 fragColor;
 
 uniform vec2 resolution;
 uniform vec2 start;
+uniform vec2 center;
+uniform float zoom;
 uniform float palette_offset;
 
 const int MAX_ITER = 1000;
@@ -71,7 +75,7 @@ vec4 mandelbrot(vec2 c){
 void main()
 {
     float aspect_ratio = resolution.x / resolution.y;
-    vec2 uv = (gl_FragCoord.xy / resolution.x - vec2(0.5,0.25)) * 3.;
+    vec2 uv = (gl_FragCoord.xy / resolution.x * zoom - center);
     
     vec2 c = uv;
     

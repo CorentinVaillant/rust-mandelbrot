@@ -28,7 +28,9 @@ macro_rules! info_display{
     ()=>{
         r#"
 current set : {}      to change the drawed set press J => Julia, M => Mandelbrot
+current center : {} +i{} use wasd to move it
 current start value : {} +i{} use the arrows to move it
+current zoom value : {},
 current palette offset :{}    use + and - to change it
 press 0 to reset to default
 press h to see infos 
