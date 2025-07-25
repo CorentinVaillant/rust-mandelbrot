@@ -73,12 +73,10 @@ vec4 mandelbrot(vec2 c){
 }
 
 void main()
-{
-    float aspect_ratio = resolution.x / resolution.y;
-    vec2 uv = (gl_FragCoord.xy / resolution.x * zoom - center);
-    
-    vec2 c = uv;
-    
+{    
+    vec2 uv = (gl_FragCoord.xy - resolution / 2.0) * zoom / resolution.y;
+    vec2 c = center + uv;
+
     fragColor = mandelbrot(c);
    
 }

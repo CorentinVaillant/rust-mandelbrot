@@ -65,11 +65,8 @@ vec4 julia(vec2 z,vec2 c){
 
 void main()
 {
-    float aspect_ratio = resolution.x / resolution.y;
-    vec2 uv = (gl_FragCoord.xy / resolution.x * zoom - center);
-    
-    vec2 z = uv;
+    vec2 uv = (gl_FragCoord.xy - resolution / 2.0) * zoom / resolution.y;
+    vec2 z = center + uv;
 
     fragColor = julia(z,start);
-   
 }
