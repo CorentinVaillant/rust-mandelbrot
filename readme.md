@@ -9,8 +9,8 @@ This is a little project, where I am drawing some complexes fractals, using the 
 - Use the arrows to move the center.
 - Use `shift` and `ctrl` to zoom.
 - Use `+` and `-` to change the color palette offset.
-- Press 0 to reset to default.
-- Press h to see infos.
+- Press `0` to reset to default.
+- Press `h` to see infos.
 
 ## Exemples
 
